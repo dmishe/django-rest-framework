@@ -573,10 +573,7 @@ class CreateModelMixin(ModelMixin):
                     data[m2m_data[fieldname][0]] = related_item
                     manager.through(**data).save()
 
-        headers = {}
-        if hasattr(self.resource, 'url'):
-            headers['Location'] = self.resource(self).url(instance)
-        return Response(status.HTTP_201_CREATED, instance, headers)
+        return Response(status.HTTP_201_CREATED, instance)
 
 
 class UpdateModelMixin(ModelMixin):
