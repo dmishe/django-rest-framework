@@ -89,6 +89,9 @@ class RequestMixin(object):
         """
         if not hasattr(self, '_data'):
             self._load_data_and_files()
+            if self._data and self.kwargs:
+                self._data.update(self.kwargs)
+
         return self._data
 
     @property
@@ -494,6 +497,9 @@ class ModelMixin(object):
         tmp = dict(kwargs)
 
         for field in model._meta.fields:
+            if field.name in tmp and field.name in content:
+                del tmp[field.name]
+
             if isinstance(field, ForeignKey) and field.name in tmp:
                 # translate 'related_field' kwargs into 'related_field_id'
                 tmp[field.name + '_id'] = tmp[field.name]
